@@ -1,0 +1,12 @@
+@import "../styles/globals.css";
+
+@layer base {
+  :root {
+    --font-poppins: 'Poppins', sans-serif;
+  }
+
+  body {
+    @apply min-w-[320px] min-h-screen relative m-0 bg-background text-foreground;
+    font-family: var(--font-poppins);
+  }
+}
