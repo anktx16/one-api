@@ -14,7 +14,7 @@ const queryClient = new QueryClient()
 
 
 export function App() {
-  const client = treaty<App>('localhost:3000', {
+  const client = treaty<App>(import.meta.env.VITE_API_URL, {
     fetch: { credentials: 'include' }
   })
 
