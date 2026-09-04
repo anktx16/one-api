@@ -1,0 +1,15 @@
+-- AlterTable
+ALTER TABLE "ApiKey" ALTER COLUMN "creditsConsumed" SET DEFAULT 0,
+ALTER COLUMN "creditsConsumed" SET DATA TYPE DECIMAL(65,30);
+
+-- AlterTable
+ALTER TABLE "Conversation" ALTER COLUMN "inputTokenCount" SET DATA TYPE DECIMAL(65,30),
+ALTER COLUMN "outputTokenCount" SET DATA TYPE DECIMAL(65,30);
+
+-- AlterTable
+ALTER TABLE "ModelProviderMapping" ALTER COLUMN "inputTokenCost" SET DATA TYPE DECIMAL(65,30),
+ALTER COLUMN "OutputTokenCost" SET DATA TYPE DECIMAL(65,30);
+
+-- AlterTable
+ALTER TABLE "User" ALTER COLUMN "credits" SET DEFAULT 0,
+ALTER COLUMN "credits" SET DATA TYPE DECIMAL(65,30);

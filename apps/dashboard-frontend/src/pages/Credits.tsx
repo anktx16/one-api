@@ -79,20 +79,6 @@ export const Credits = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid gap-4 sm:grid-cols-3">
-              {[10, 50, 100].map((amount) => (
-                <button
-                  key={amount}
-                  onClick={() => onrampMutation.mutate()}
-                  disabled={onrampMutation.isPending}
-                  className="group flex flex-col items-center gap-2 rounded-xl border border-border/50 p-6 transition-all hover:border-primary/50 hover:bg-primary/5 disabled:pointer-events-none disabled:opacity-50"
-                >
-                  <Sparkles className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" />
-                  <span className="text-2xl font-bold">${amount}</span>
-                  <span className="text-xs text-muted-foreground">Add credits</span>
-                </button>
-              ))}
-            </div>
 
             <div className="mt-6 flex justify-center">
               <Button

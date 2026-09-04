@@ -6,4 +6,6 @@ import { app } from "./app"
 app.use(cors({
     origin: 'http://localhost:3001',
     credentials: true
-})).listen(3000)
+})).listen(3000, () => {
+    console.log("listening on port 3000")
+})

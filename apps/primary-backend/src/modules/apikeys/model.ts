@@ -14,6 +14,11 @@ export namespace ApiKeyModel {
 
     export type createApiKeyResponseSchema = typeof createApiKeyResponseSchema.static
 
+    export const createApiKeyFailedResponseSchema = t.Object({
+        message: t.Literal("failed to create api key")
+    })
+
+    export type createApiKeyFailedResponseSchema = typeof createApiKeyFailedResponseSchema.static
 
 
     export const updateApiKeySchema = t.Object({
@@ -48,6 +53,12 @@ export namespace ApiKeyModel {
     })
 
     export type getApiKeyResponseSchema = typeof getApiKeyResponseSchema.static;
+
+    export const getApiKeyFailedResponseSchema = t.Object({
+        message: t.Literal("failed to get api key")
+    })
+
+    export type getApiKeyFailedResponseSchema = typeof getApiKeyFailedResponseSchema.static
 
 
     export const deleteApiKeyResponseSchema = t.Object({
