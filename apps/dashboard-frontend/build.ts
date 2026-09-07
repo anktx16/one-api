@@ -129,10 +129,10 @@ const result = await Bun.build({
   minify: true,
   target: "browser",
   sourcemap: "linked",
-  env: "VITE_*",
   define: {
-    "process.env.NODE_ENV": JSON.stringify("production"),
-  },
+  "process.env.NODE_ENV": JSON.stringify("production"),
+  "import.meta.env.VITE_API_URL": JSON.stringify(process.env.VITE_API_URL),
+},
   ...cliConfig,
 });
 
