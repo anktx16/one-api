@@ -3,7 +3,7 @@ import { AuthModel } from "./model";
 import { AuthService } from "./service";
 import jwt from "@elysiajs/jwt";
 
-export const app = new Elysia({ prefix: "auth"})
+export const app = new Elysia({ prefix: "auth" })
     .use(
         jwt({
             name: 'jwt',
@@ -11,19 +11,20 @@ export const app = new Elysia({ prefix: "auth"})
         })
     )
 
-    .post("/sign-up", async ({body, status})=>{
+    .post("/sign-up", async ({ body, status }) => {
         try {
             console.log("log 1")
-        const userId = await AuthService.signup(body.email, body.password);
-        return {
-            id: String(userId)
+            const userId = await AuthService.signup(body.email, body.password);
+            return {
+                id: String(userId)
+            }
+        } catch (e) {
+            console.error("SIGNUP ERROR:", e);
+            return status(400, {
+                message: "Error while signing up"
+            })
         }
-       } catch(e){
-        return status(400, {
-            message: "Error while signing up"
-        })
-       }
-        
+
     }, {
         body: AuthModel.signUpSchema,
         response: {
@@ -31,21 +32,21 @@ export const app = new Elysia({ prefix: "auth"})
             400: AuthModel.signUpFailedResponseSchema
         }
     })
-    .post("/sign-in", async ({jwt, body, status, cookie: { auth }})=>{
-        const {correctCredentials, userId} = await AuthService.signin(body.email, body.password);
-        
-        if(correctCredentials && userId){
+    .post("/sign-in", async ({ jwt, body, status, cookie: { auth } }) => {
+        const { correctCredentials, userId } = await AuthService.signin(body.email, body.password);
+
+        if (correctCredentials && userId) {
             const token = await jwt.sign({ userId })
 
             auth.set({
-            value: token,
-            httpOnly: true,
-            maxAge: 7 * 86400,
+                value: token,
+                httpOnly: true,
+                maxAge: 7 * 86400,
             })
 
-        return {
-            message: "signed in successfully"
-        }
+            return {
+                message: "signed in successfully"
+            }
         } else {
             return status(400, {
                 message: "Invalid username or password"
@@ -58,12 +59,12 @@ export const app = new Elysia({ prefix: "auth"})
             400: AuthModel.signInFailedResponseSchema
         }
     })
-    .resolve(async ({cookie: { auth }, status, jwt}) => {
-        if(!auth) return status(401);
-        
+    .resolve(async ({ cookie: { auth }, status, jwt }) => {
+        if (!auth) return status(401);
+
         const decoded = await jwt.verify(auth.value as string)
 
-        if(!decoded || !decoded.userId){
+        if (!decoded || !decoded.userId) {
             return status(401)
         }
 
@@ -71,9 +72,9 @@ export const app = new Elysia({ prefix: "auth"})
             userId: decoded.userId
         }
     })
-    .get("/profile",async ({userId, status}) => {
+    .get("/profile", async ({ userId, status }) => {
         const userData = await AuthService.getProfileDetails(Number(userId))
-        if(!userData) {
+        if (!userData) {
             return status(400, {
                 message: "error while fetching user details"
             })
