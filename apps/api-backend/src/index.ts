@@ -189,8 +189,4 @@ const app = new Elysia()
   }, {
     body: Conversation
   })
-  .listen(4000);
-
-console.log(
-  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
-);
+  .listen(Number(process.env.PORT) || 4000);

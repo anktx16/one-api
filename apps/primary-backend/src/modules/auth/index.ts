@@ -63,7 +63,7 @@ export const app = new Elysia({ prefix: "auth"})
         
         const decoded = await jwt.verify(auth.value as string)
 
-        if(!decoded.userId || !decoded){
+        if(!decoded || !decoded.userId){
             return status(401)
         }
 

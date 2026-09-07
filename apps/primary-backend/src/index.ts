@@ -1,11 +1,11 @@
+import cors from "@elysiajs/cors";
+import { app } from "./app";
 
-
-import cors from "@elysiajs/cors"
-import { app } from "./app"
-
-app.use(cors({
-    origin: 'http://localhost:3001',
-    credentials: true
-})).listen(3000, () => {
-    console.log("listening on port 3000")
-})
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  })
+).listen(Number(process.env.PORT) || 3000, () => {
+  console.log(`Primary backend running on port ${process.env.PORT || 3000}`);
+});
