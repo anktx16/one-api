@@ -14,7 +14,7 @@ const queryClient = new QueryClient()
 
 
 export function App() {
-  const client = treaty<App>(import.meta.env.VITE_API_URL, {
+  const client = treaty<App>("https://one-api-primary.onrender.com", {
     fetch: { credentials: 'include' }
   })
 
