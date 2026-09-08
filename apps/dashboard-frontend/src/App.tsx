@@ -7,6 +7,7 @@ import { SignIn } from "./pages/SignIn";
 import { SignUp } from "./pages/SignUp";
 import { ApiKeys } from "./pages/ApiKeys";
 import { Credits } from "./pages/Credits";
+import { Docs } from "./pages/Docs";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ElysiaClientProvider } from "./providers/Eden";
 
@@ -29,6 +30,7 @@ export function App() {
             <Route path="/signup" element={<SignUp />} />
             <Route path="/api-keys" element={<ApiKeys />} />
             <Route path="/credits" element={<Credits />} />
+            <Route path="/docs" element={<Docs />} />
           </Routes>
         </BrowserRouter>
       </ElysiaClientProvider>

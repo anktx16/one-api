@@ -1,9 +1,11 @@
 import { Link, useLocation, useNavigate } from 'react-router'
 import { Button } from '@/components/ui/button'
-import { Zap, Key, CreditCard, LayoutDashboard, LogOut } from 'lucide-react'
+import { BookOpen, Key, CreditCard, LayoutDashboard, LogOut } from 'lucide-react'
+import { LogoMark } from '@/components/LogoMark'
 
 const navItems = [
   { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { path: '/docs', label: 'Docs', icon: BookOpen },
   { path: '/api-keys', label: 'API Keys', icon: Key },
   { path: '/credits', label: 'Credits', icon: CreditCard },
 ]
@@ -13,13 +15,13 @@ export function Navbar() {
   const navigate = useNavigate()
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-xl">
+    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-background/55 shadow-[0_10px_30px_oklch(0_0_0_/_22%)] backdrop-blur-2xl backdrop-saturate-150">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-        <Link to="/dashboard" className="flex items-center gap-2 group">
+        <Link to="/" className="flex items-center gap-2 group">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground transition-transform group-hover:scale-110">
-            <Zap className="h-4 w-4" />
+            <LogoMark className="h-5 w-5" />
           </div>
-          <span className="text-lg font-bold tracking-tight">OpenRouter</span>
+          <span className="text-lg font-bold tracking-tight">oneApi</span>
         </Link>
 
         <div className="flex items-center gap-1">

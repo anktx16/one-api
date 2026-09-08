@@ -10,7 +10,8 @@
   "private": true,
 
   "scripts": {
-    "generate": "prisma generate"
+    "generate": "prisma generate",
+    "seed": "bun seed.ts"
   },
 
   "devDependencies": {

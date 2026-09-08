@@ -6,7 +6,8 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Zap, Loader2 } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
+import { LogoMark } from '@/components/LogoMark'
 
 export const SignIn = () => {
   const emailRef = useRef<HTMLInputElement>(null)
@@ -47,9 +48,9 @@ export const SignIn = () => {
       <div className="w-full max-w-md">
         <Link to="/" className="mb-8 flex items-center justify-center gap-2">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground">
-            <Zap className="h-5 w-5" />
+            <LogoMark className="h-5 w-5" />
           </div>
-          <span className="text-xl font-bold tracking-tight">OpenRouter</span>
+          <span className="text-xl font-bold tracking-tight">oneApi</span>
         </Link>
 
         <Card className="border-border/50">

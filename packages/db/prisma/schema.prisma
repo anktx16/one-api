@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../generated/prisma"
@@ -19,8 +13,8 @@ model User {
   password           String
   credits            Int                @default(0)
   apiKeys            ApiKey[]
-  onrampTransactions OnrampTransacton[]
   conversations      Conversation[]
+  onrampTransactions OnrampTransacton[]
 }
 
 model ApiKey {
@@ -30,8 +24,8 @@ model ApiKey {
   apiKey          String         @unique
   disabled        Boolean        @default(false)
   deleted         Boolean        @default(false)
-  lastUsed        DateTime?
   creditsConsumed Int            @default(0)
+  lastUsed        DateTime?
   user            User           @relation(fields: [userId], references: [id])
   conversations   Conversation[]
 }
@@ -63,12 +57,12 @@ model ModelProviderMapping {
   id              Int            @id @default(autoincrement())
   modelId         Int
   providerId      Int
-  providerModelId String
   inputTokenCost  Int
-  outputTokenCost Int        @map("OutputTokenCost")
+  outputTokenCost Int            @map("OutputTokenCost")
+  providerModelId String
+  conversations   Conversation[]
   model           Model          @relation(fields: [modelId], references: [id])
   provider        Provider       @relation(fields: [providerId], references: [id])
-  conversations   Conversation[]
 }
 
 model OnrampTransacton {
@@ -88,7 +82,7 @@ model Conversation {
   output                 String
   inputTokenCount        Int
   outputTokenCount       Int
-  user                   User                 @relation(fields: [userId], references: [id])
   apiKey                 ApiKey               @relation(fields: [apiKeyId], references: [id])
   modelProviderMapping   ModelProviderMapping @relation(fields: [modelProviderMappingId], references: [id])
+  user                   User                 @relation(fields: [userId], references: [id])
 }
