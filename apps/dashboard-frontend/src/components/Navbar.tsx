@@ -2,6 +2,8 @@ import { Link, useLocation, useNavigate } from 'react-router'
 import { Button } from '@/components/ui/button'
 import { BookOpen, Key, CreditCard, LayoutDashboard, LogOut } from 'lucide-react'
 import { LogoMark } from '@/components/LogoMark'
+import { useAuth } from '@/hooks/useAuth'
+import { useElysiaClient } from '@/providers/Eden'
 
 const navItems = [
   { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -13,6 +15,16 @@ const navItems = [
 export function Navbar() {
   const location = useLocation()
   const navigate = useNavigate()
+  const elysiaClient = useElysiaClient();
+  async function handleSignOut() {
+    try {
+      await elysiaClient.auth['sign-out'].post();
+      navigate("/");
+    }
+    catch(error) {
+      console.error("Error: ", error);
+    }
+  }
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-background/55 shadow-[0_10px_30px_oklch(0_0_0_/_22%)] backdrop-blur-2xl backdrop-saturate-150">
@@ -41,12 +53,11 @@ export function Navbar() {
             )
           })}
         </div>
-
-        <Button
+          <Button
           variant="ghost"
           size="sm"
           className="text-muted-foreground hover:text-destructive"
-          onClick={() => navigate('/signin')}
+          onClick={handleSignOut}
         >
           <LogOut className="h-4 w-4" />
           Sign Out

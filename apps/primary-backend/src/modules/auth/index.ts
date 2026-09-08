@@ -61,6 +61,22 @@ export const app = new Elysia({ prefix: "auth" })
             400: AuthModel.signInFailedResponseSchema
         }
     })
+    .post("sign-out", ({ cookie: { auth } }) => {
+        try {
+            auth.remove();
+            return { message: "signed out successfully" }
+        } catch (e) {
+            console.error("Error: ", e);
+            return status(400, {
+                message: "sign out failed"
+            })
+        }
+    }, {
+        response: {
+            200: AuthModel.signOutResponseSchema,
+            400: AuthModel.signOutFailedResponseSchema
+        }
+    })
     .resolve(async ({ cookie: { auth }, status, jwt }) => {
         if (!auth) return status(401);
 

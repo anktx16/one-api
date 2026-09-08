@@ -28,7 +28,7 @@ export namespace AuthModel {
     export type signUpResponseSchema = typeof signUpResponseSchema.static
 
     export const signUpFailedResponseSchema = t.Object({
-       message: t.Literal("Error while signing up")
+        message: t.Literal("Error while signing up")
     })
 
     export type signUpFailedResponseSchema = typeof signUpFailedResponseSchema.static
@@ -38,6 +38,19 @@ export namespace AuthModel {
     })
 
     export type signInFailedResponseSchema = typeof signInFailedResponseSchema.static
+
+    export const signOutResponseSchema = t.Object({
+        message: t.Literal("signed out successfully")
+    })
+
+    export type signOutResponseSchema = typeof signOutResponseSchema.static
+
+    export const signOutFailedResponseSchema = t.Object({
+        message: t.Literal("sign out failed")
+    })
+
+    export type signOutFailedResponseSchema = typeof signInFailedResponseSchema.static
+    
 
     export const profileResponseSchema = t.Object({
         credits: t.Number()

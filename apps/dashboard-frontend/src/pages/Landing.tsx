@@ -3,6 +3,8 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Shield, Globe, ArrowRight, ArrowUpRight, Braces, Code2, Layers, Route } from 'lucide-react'
 import { LogoMark } from '@/components/LogoMark'
+import { useAuth } from '@/hooks/useAuth'
+import { Navbar2 } from '@/components/Navbar2'
 
 const features = [
   {
@@ -43,35 +45,16 @@ const modelRoutes = [
 ]
 
 export const Landing = () => {
+
+  const { data, isLoading } = useAuth();
+  const isSignedIn = !!data;
+
   return (
     <div className="relative flex min-h-screen w-full flex-col overflow-hidden">
       <div aria-hidden="true" className="pointer-events-none absolute -top-52 left-1/2 h-[31.25rem] w-[31.25rem] -translate-x-1/2 rounded-full border border-primary/20 bg-primary/8 blur-3xl" />
       <div aria-hidden="true" className="pointer-events-none absolute top-80 -right-64 h-[31.25rem] w-[31.25rem] rounded-full bg-chart-4/8 blur-3xl" />
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-background/55 shadow-[0_10px_30px_oklch(0_0_0_/_22%)] backdrop-blur-2xl backdrop-saturate-150">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-          <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-              <LogoMark className="h-5 w-5" />
-            </div>
-            <span className="text-lg font-bold tracking-tight">oneApi</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <Link to="/docs">
-              <Button variant="ghost" size="sm">Docs</Button>
-            </Link>
-            <Link to="/signin">
-              <Button variant="ghost" size="sm">Sign In</Button>
-            </Link>
-            <Link to="/signup">
-              <Button size="sm">
-                Get Started
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </header>
+      <Navbar2/>
 
       {/* Hero */}
       <section className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 pt-36 pb-24">
@@ -90,15 +73,15 @@ export const Landing = () => {
           One API surface for moving between GPT-OSS, Qwen, Grok Compound Mini, DeepSeek V4, Kimi K3, and the next model worth trying.
         </p>
         <div className="mt-10 flex items-center gap-4">
-          <Link to="/signup">
-            <Button size="lg" className="h-12 px-8 text-base shadow-[0_0_30px_oklch(0.64_0.235_28_/_28%)]">
-              Open dashboard
-              <ArrowRight className="h-4 w-4" />
+          <Link to={isSignedIn ? "/dashboard" : "/signin"}>
+            <Button size="lg" disabled={isLoading} className="h-12 px-8 text-base shadow-[0_0_30px_oklch(0.64_0.235_28_/_28%)]">
+              {isLoading ? "loading..." : isSignedIn ? "Open Dashboard" : "Get Started"}
+              {!isLoading && <ArrowRight className="h-4 w-4" />}
             </Button>
           </Link>
-          <Link to="/dashboard">
+          <Link target='blank' to="https://www.linkedin.com/in/ankit-yadav-55a93b27b/">
             <Button variant="outline" size="lg" className="h-12 px-8 text-base">
-              See the routes
+              Contact Dev
             </Button>
           </Link>
         </div>
@@ -197,7 +180,7 @@ export const Landing = () => {
               </p>
               <Link to="/signup" className="mt-8 inline-block">
                 <Button size="lg" className="h-12 px-7 text-base shadow-[0_0_28px_oklch(0.64_0.235_28_/_30%)]">
-                  Open the interface
+                  {isLoading ? "loading..." : isSignedIn ? "Open the interface" : "Signin to see models"}
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>

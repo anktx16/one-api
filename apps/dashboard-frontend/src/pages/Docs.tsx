@@ -3,6 +3,7 @@ import { ArrowRight, BookOpen, KeyRound, ShieldCheck, Terminal } from 'lucide-re
 import { Navbar } from '@/components/Navbar'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
+import { Navbar2 } from '@/components/Navbar2'
 
 const examples = [
   {
@@ -61,7 +62,7 @@ data = response.json()`,
 export const Docs = () => {
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
+      <Navbar2 />
       <main className="mx-auto max-w-6xl px-6 pb-20 pt-28">
         <div className="max-w-3xl">
           <div className="inline-flex items-center gap-2 rounded-full border border-primary/35 bg-primary/10 px-3 py-1.5 text-sm text-primary">

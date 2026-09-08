@@ -1,5 +1,5 @@
 import { treaty } from "@elysiajs/eden";
-import type { App } from "app"
+import type { App } from "primary-backend"
 import { createContext, useContext } from "react";
 
 const client = treaty<App>("https://one-api-primary.onrender.com", {
