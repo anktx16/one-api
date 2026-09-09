@@ -4,6 +4,7 @@ import { BookOpen, Key, CreditCard, LayoutDashboard, LogOut } from 'lucide-react
 import { LogoMark } from '@/components/LogoMark'
 import { useAuth } from '@/hooks/useAuth'
 import { useElysiaClient } from '@/providers/Eden'
+import { useQueryClient } from '@tanstack/react-query'
 
 const navItems = [
   { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -16,9 +17,17 @@ export function Navbar() {
   const location = useLocation()
   const navigate = useNavigate()
   const elysiaClient = useElysiaClient();
+  const queryClient = useQueryClient();
+
+
   async function handleSignOut() {
     try {
-      await elysiaClient.auth['sign-out'].post();
+      const res = await elysiaClient.auth['sign-out'].post();
+      if (res.data) {
+        await queryClient.invalidateQueries({
+          queryKey: ["auth"],
+        });
+      }
       navigate("/");
     }
     catch(error) {
