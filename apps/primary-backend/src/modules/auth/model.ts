@@ -63,4 +63,11 @@ export namespace AuthModel {
     })
 
     export type profileResponseFailedSchema = typeof profileResponseFailedSchema.static
+
+
+    export const rateLimitResponseSchema = t.Object({
+        message: t.Literal("Too many attempts. Please try again later.")
+    })
+
+    export type rateLimitResponseSchema = typeof rateLimitResponseSchema.static
 }
