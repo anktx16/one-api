@@ -1,6 +1,6 @@
 import type { App } from "primary-backend"
 import { treaty } from "@elysiajs/eden";
-import { BrowserRouter, Navigate, Route, Routes, useNavigate } from "react-router";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import { Landing } from "./pages/Landing";
 import { Dashboard } from "./pages/Dashboard";
 import { SignIn } from "./pages/SignIn";
@@ -23,6 +23,20 @@ export function App() {
   function AppRoutes() {
     const { data, isLoading } = useAuth();
     const isSignedIn = !!data;
+    const protectedRoute = (page: React.ReactNode) => {
+      // On a page refresh the auth cookie is verified asynchronously. Do not
+      // redirect until that request has finished, otherwise a valid session is
+      // mistaken for a signed-out user.
+      if (isLoading) {
+        return (
+          <div className="flex min-h-screen items-center justify-center text-sm text-muted-foreground">
+            Checking your session…
+          </div>
+        );
+      }
+
+      return isSignedIn ? page : <Navigate to="/signin" replace />;
+    };
 
     return (
        <Routes>
@@ -33,17 +47,17 @@ export function App() {
 
       <Route
         path="/dashboard"
-        element={isSignedIn ? <Dashboard /> : <Navigate to="/signin" />}
+        element={protectedRoute(<Dashboard />)}
       />
 
       <Route
         path="/api-keys"
-        element={isSignedIn ? <ApiKeys /> : <Navigate to="/signin" />}
+        element={protectedRoute(<ApiKeys />)}
       />
 
       <Route
         path="/credits"
-        element={isSignedIn ? <Credits /> : <Navigate to="/signin" />}
+        element={protectedRoute(<Credits />)}
       />
     </Routes>
     );

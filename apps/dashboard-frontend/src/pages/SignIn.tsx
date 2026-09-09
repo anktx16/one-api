@@ -1,5 +1,5 @@
 import { useElysiaClient } from '@/providers/Eden'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { Button } from '@/components/ui/button'
@@ -13,18 +13,29 @@ export const SignIn = () => {
   const emailRef = useRef<HTMLInputElement>(null)
   const passwordRef = useRef<HTMLInputElement>(null)
   const elysiaClient = useElysiaClient()
+  const queryClient = useQueryClient()
   const navigate = useNavigate()
   const [error, setError] = useState<string | null>(null)
 
   const mutation = useMutation({
     mutationFn: ({ email, password }: { email: string; password: string }) =>
       elysiaClient.auth['sign-in'].post({ email, password }),
-    onSuccess: (res) => {
-      if (res.data && 'message' in res.data) {
-        navigate('/dashboard')
-      } else {
+    onSuccess: async (res) => {
+      if (res.error || !res.data) {
         setError('Invalid email or password.')
+        return
       }
+
+      // Populate the auth cache before changing routes. This avoids the route
+      // guard seeing the old unauthenticated result immediately after sign-in.
+      const profile = await elysiaClient.auth.profile.get()
+      if (profile.error || !profile.data) {
+        setError('Sign in succeeded, but the session could not be verified. Please try again.')
+        return
+      }
+
+      queryClient.setQueryData(['auth'], profile.data)
+      navigate('/dashboard', { replace: true })
     },
     onError: () => {
       setError('Invalid email or password.')
