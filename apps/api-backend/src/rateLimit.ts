@@ -1,6 +1,6 @@
 import { redis } from "./redis";
 
-const RATE_LIMIT = 100;
+const RATE_LIMIT = 5;
 const WINDOW_SECONDS = 60;
 
 const rateLimitScript = `
