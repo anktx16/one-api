@@ -6,6 +6,7 @@ import { Gemini } from "./llms/Gemini";
 import { Groq } from "./llms/Groq";
 import { NvidiaNim } from "./llms/NvidiaNim";
 import { LlmResponse } from "./llms/Base";
+import { checkRateLimit } from "./rateLimit";
 
 async function getLlmResponse(
   providerModelId: string,
@@ -42,7 +43,7 @@ async function getLlmResponse(
 
 const app = new Elysia()
   .use(bearer())
-  .post("/api/v1/chat/completions", async ({ status, bearer: apiKey, body }) => {
+  .post("/api/v1/chat/completions", async ({ status, bearer: apiKey, body, set }) => {
     const model = body.model;
 
     const apiKeyDb = await prisma.apiKey.findFirst({
@@ -60,6 +61,20 @@ const app = new Elysia()
       return status(403, {
         message: "invalid api key"
       })
+    }
+
+    const rateLimit = await checkRateLimit(apiKey || "");
+
+    set.headers["X-RateLimit-Limit"] = String(rateLimit.limit);
+    set.headers["X-RateLimit-Remaining"] = String(rateLimit.remaining);
+    set.headers["X-RateLimit-Reset"] = String(rateLimit.reset);
+
+    if (!rateLimit.allowed) {
+      set.headers["Retry-After"] = String(rateLimit.reset);
+
+      return status(429, {
+        message: "Too many requests. Please try again later."
+      });
     }
 
     const modelDb = await prisma.model.findFirst({
@@ -129,7 +144,7 @@ const app = new Elysia()
 
     try {
 
-        await prisma.$transaction([
+      await prisma.$transaction([
 
         // Deduct user credits
         prisma.user.update({

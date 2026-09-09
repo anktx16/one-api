@@ -11,7 +11,8 @@
     "db": "*",
     "elysia": "^1.4.30",
     "grok-sdk": "^0.0.1-security",
-    "groq-sdk": "^1.6.0"
+    "groq-sdk": "^1.6.0",
+    "ioredis": "^6.0.0"
   },
   "devDependencies": {
     "bun-types": "latest"
