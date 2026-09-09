@@ -42,6 +42,7 @@ export const app = new Elysia({ prefix: "auth" })
                 value: token,
                 httpOnly: true,
                 maxAge: 7 * 86400,
+                path: "/",
                 sameSite: "none",
                 secure: true,
             })
@@ -61,9 +62,20 @@ export const app = new Elysia({ prefix: "auth" })
             400: AuthModel.signInFailedResponseSchema
         }
     })
-    .post("sign-out", ({ cookie: { auth } }) => {
+    .post("/sign-out", ({ cookie: { auth } }) => {
         try {
-            auth.remove();
+            // Cookie attributes must match the ones used when signing in. In
+            // particular, an explicit path makes the browser replace the
+            // existing auth cookie instead of creating a second, expired one.
+            auth.set({
+                value: "",
+                expires: new Date(0),
+                maxAge: 0,
+                path: "/",
+                httpOnly: true,
+                sameSite: "none",
+                secure: true,
+            });
             return { message: "signed out successfully" }
         } catch (e) {
             console.error("Error: ", e);

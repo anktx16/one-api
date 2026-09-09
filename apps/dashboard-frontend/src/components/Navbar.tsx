@@ -22,16 +22,20 @@ export function Navbar() {
 
   async function handleSignOut() {
     try {
-      const res = await elysiaClient.auth['sign-out'].post();
-      if (res.data) {
-        await queryClient.invalidateQueries({
-          queryKey: ["auth"],
-        });
+      const res = await elysiaClient.auth["sign-out"].post();
+
+      if (res.error || !res.data) {
+        throw new Error("Sign out request failed");
       }
-      navigate("/");
-    }
-    catch(error) {
-      console.error("Error: ", error);
+
+      // Do not let cached user data make the app look authenticated after the
+      // browser has discarded the session cookie.
+      queryClient.removeQueries({ queryKey: ["auth"] });
+      queryClient.removeQueries({ queryKey: ["api-keys"] });
+      queryClient.removeQueries({ queryKey: ["user-profile"] });
+      navigate("/", { replace: true });
+    } catch (error) {
+      console.error("Sign out error", error);
     }
   }
 
