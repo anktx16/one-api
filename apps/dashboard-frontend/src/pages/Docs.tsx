@@ -10,7 +10,7 @@ const examples = [
   {
     title: 'cURL',
     language: 'Shell',
-    code: `curl "https://YOUR_API_URL/api/v1/chat/completions" \\
+    code: `curl "https://oneapi-api.ankitydv.me/api/v1/chat/completions" \\
   -H "Authorization: Bearer $ONE_API_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{
@@ -22,7 +22,7 @@ const examples = [
     title: 'JavaScript',
     language: 'Node.js',
     code: `const response = await fetch(
-  'https://YOUR_API_URL/api/v1/chat/completions',
+  'https://oneapi-api.ankitydv.me/api/v1/chat/completions',
   {
     method: 'POST',
     headers: {
@@ -45,7 +45,7 @@ const data = await response.json()`,
 import requests
 
 response = requests.post(
-    'https://YOUR_API_URL/api/v1/chat/completions',
+    'https://oneapi-api.ankitydv.me/api/v1/chat/completions',
     headers={
         'Authorization': f"Bearer {os.environ['ONE_API_KEY']}",
         'Content-Type': 'application/json',
@@ -64,7 +64,7 @@ data = response.json()`,
     code: `import axios from 'axios'
 
 const { data } = await axios.post(
-  'https://YOUR_API_URL/api/v1/chat/completions',
+  'https://oneapi-api.ankitydv.me/api/v1/chat/completions',
   {
     model: 'openai/gpt-oss-120b',
     messages: [{ role: 'user', content: 'Hello' }],
@@ -144,7 +144,7 @@ export const Docs = () => {
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">Examples</p>
               <h2 className="mt-2 text-3xl font-bold tracking-tight">Use the stack you already know.</h2>
             </div>
-            <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">Replace <code className="rounded bg-muted px-1.5 py-0.5 text-foreground">YOUR_API_URL</code> with your deployed API address.</p>
+            <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">Replace <code className="rounded bg-muted px-1.5 py-0.5 text-foreground">oneapi-api.ankitydv.me</code> with your deployed API address.</p>
           </div>
           <div className="mt-7 grid gap-6">
             {examples.map((example) => (
