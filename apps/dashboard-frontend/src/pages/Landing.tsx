@@ -73,7 +73,7 @@ export const Landing = () => {
           One API surface for moving between GPT-OSS, Qwen, Grok Compound Mini, DeepSeek V4, Kimi K3, and the next model worth trying.
         </p>
         <div className="mt-10 flex items-center gap-4">
-          <Link to={isSignedIn ? "/dashboard" : "/signin"}>
+          <Link to={isSignedIn ? "/dashboard" : "/signup"}>
             <Button size="lg" disabled={isLoading} className="h-12 px-8 text-base shadow-[0_0_30px_oklch(0.64_0.235_28_/_28%)]">
               {isLoading ? "loading..." : isSignedIn ? "Open Dashboard" : "Get Started"}
               {!isLoading && <ArrowRight className="h-4 w-4" />}

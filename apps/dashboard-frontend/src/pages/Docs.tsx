@@ -1,5 +1,6 @@
 import { Link } from 'react-router'
-import { ArrowRight, BookOpen, KeyRound, ShieldCheck, Terminal } from 'lucide-react'
+import { useState } from 'react'
+import { ArrowRight, BookOpen, Check, Copy, KeyRound, ShieldCheck, Terminal } from 'lucide-react'
 import { Navbar } from '@/components/Navbar'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -57,9 +58,40 @@ response = requests.post(
 
 data = response.json()`,
   },
+  {
+    title: 'JavaScript with Axios',
+    language: 'Node.js + Axios',
+    code: `import axios from 'axios'
+
+const { data } = await axios.post(
+  'https://YOUR_API_URL/api/v1/chat/completions',
+  {
+    model: 'openai/gpt-oss-120b',
+    messages: [{ role: 'user', content: 'Hello' }],
+  },
+  {
+    headers: {
+      Authorization: \`Bearer \${process.env.ONE_API_KEY}\`,
+      'Content-Type': 'application/json',
+    },
+  },
+)`,
+  },
 ]
 
 export const Docs = () => {
+  const [copiedExample, setCopiedExample] = useState<string | null>(null)
+
+  const copyExample = async (title: string, code: string) => {
+    try {
+      await navigator.clipboard.writeText(code)
+      setCopiedExample(title)
+      setTimeout(() => setCopiedExample((current) => (current === title ? null : current)), 2000)
+    } catch (error) {
+      console.error('Unable to copy code example', error)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar2 />
@@ -120,7 +152,22 @@ export const Docs = () => {
                 <CardContent className="p-0">
                   <div className="flex items-center justify-between border-b border-border/70 px-5 py-3">
                     <span className="font-medium">{example.title}</span>
-                    <span className="text-xs text-muted-foreground">{example.language}</span>
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs text-muted-foreground">{example.language}</span>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => void copyExample(example.title, example.code)}
+                        aria-label={`Copy ${example.title} example`}
+                      >
+                        {copiedExample === example.title ? (
+                          <Check className="h-3.5 w-3.5 text-chart-2" />
+                        ) : (
+                          <Copy className="h-3.5 w-3.5" />
+                        )}
+                        {copiedExample === example.title ? 'Copied' : 'Copy'}
+                      </Button>
+                    </div>
                   </div>
                   <pre className="overflow-x-auto p-5 text-xs leading-relaxed text-muted-foreground"><code>{example.code}</code></pre>
                 </CardContent>

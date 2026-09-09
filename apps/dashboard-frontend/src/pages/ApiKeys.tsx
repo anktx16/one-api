@@ -24,7 +24,7 @@ export const ApiKeys = () => {
   const queryClient = useQueryClient()
   const [newKeyName, setNewKeyName] = useState('')
   const [createdKey, setCreatedKey] = useState<string | null>(null)
-  const [copied, setCopied] = useState(false)
+  const [copiedKeyId, setCopiedKeyId] = useState<string | null>(null)
   const [visibleKeys, setVisibleKeys] = useState<Set<string>>(new Set())
 
   const keysQuery = useQuery({
@@ -61,10 +61,14 @@ export const ApiKeys = () => {
     },
   })
 
-  const handleCopy = (text: string) => {
-    navigator.clipboard.writeText(text)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
+  const handleCopy = async (id: string, text: string) => {
+    try {
+      await navigator.clipboard.writeText(text)
+      setCopiedKeyId(id)
+      setTimeout(() => setCopiedKeyId((current) => (current === id ? null : current)), 2000)
+    } catch (error) {
+      console.error('Unable to copy API key', error)
+    }
   }
 
   const toggleVisibility = (id: string) => {
@@ -141,9 +145,11 @@ export const ApiKeys = () => {
                   <Button
                     variant="outline"
                     size="icon"
-                    onClick={() => handleCopy(createdKey)}
+                    onClick={() => void handleCopy('new-key', createdKey)}
+                    aria-label="Copy new API key"
+                    title="Copy key"
                   >
-                    {copied ? (
+                    {copiedKeyId === 'new-key' ? (
                       <Check className="h-4 w-4 text-chart-2" />
                     ) : (
                       <Copy className="h-4 w-4" />
@@ -202,8 +208,11 @@ export const ApiKeys = () => {
                             {visibleKeys.has(key.id) ? key.apiKey : key.apiKey.slice(0, 12) + '••••••••'}
                           </code>
                           <button
+                            type="button"
                             onClick={() => toggleVisibility(key.id)}
-                            className="text-muted-foreground hover:text-foreground"
+                            className="rounded p-1 text-muted-foreground hover:bg-muted hover:text-foreground"
+                            aria-label={visibleKeys.has(key.id) ? 'Hide API key' : 'Show API key'}
+                            title={visibleKeys.has(key.id) ? 'Hide key' : 'Show key'}
                           >
                             {visibleKeys.has(key.id) ? (
                               <EyeOff className="h-3.5 w-3.5" />
@@ -211,6 +220,19 @@ export const ApiKeys = () => {
                               <Eye className="h-3.5 w-3.5" />
                             )}
                           </button>
+                          <Button
+                            variant="outline"
+                            size="icon-sm"
+                            onClick={() => void handleCopy(key.id, key.apiKey)}
+                            aria-label={`Copy ${key.name} API key`}
+                            title="Copy key"
+                          >
+                            {copiedKeyId === key.id ? (
+                              <Check className="h-3.5 w-3.5 text-chart-2" />
+                            ) : (
+                              <Copy className="h-3.5 w-3.5" />
+                            )}
+                          </Button>
                         </div>
                       </div>
 
@@ -226,21 +248,23 @@ export const ApiKeys = () => {
 
                         <div className="flex items-center gap-1">
                           <Button
-                            variant="ghost"
-                            size="icon-sm"
+                            variant={key.disabled ? 'outline' : 'destructive'}
+                            size="sm"
+                            className="min-w-24"
                             onClick={() =>
                               toggleMutation.mutate({
                                 id: key.id,
                                 disabled: !key.disabled,
                               })
                             }
-                            title={key.disabled ? 'Enable' : 'Disable'}
+                            disabled={toggleMutation.isPending}
                           >
                             {key.disabled ? (
                               <ToggleLeft className="h-4 w-4" />
                             ) : (
-                              <ToggleRight className="h-4 w-4 text-chart-2" />
+                              <ToggleRight className="h-4 w-4" />
                             )}
+                            {key.disabled ? 'Enable' : 'Disable'}
                           </Button>
                           <Button
                             variant="ghost"
